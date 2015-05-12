@@ -68,7 +68,7 @@
       require: '^mfbMenu',
       link: function($scope, $element, $attrs, mfbMenuController) {
         $element.bind('click', function() {
-          mfbMenuController.flipState();
+          mfbMenuController.close();
         });
       },
     };
@@ -97,9 +97,11 @@
         var openState = 'open',
           closedState = 'closed';
 
-        // Attached flipstate to the controller in order to be able to be required by other
+        // Attached toggle to the controller in order to be able to be required by other
         // directives such as mfbButtonClose
-        this.flipState = flipState;
+        this.toggle = toggle;
+        this.close = close;
+        this.open = open;
 
         $scope.clicked = clicked;
         $scope.hovered = hovered;
@@ -132,21 +134,33 @@
           }
 
           if (!_isHoverActive()) {
-            flipState();
+            toggle();
           }
         };
 
         function hovered() {
           if (_isHoverActive()) {
-            //flipState();
+            //toggle();
           }
         };
 
         /**
          * Invert the current state of the menu.
          */
-        function flipState() {
-          $scope.menuState = $scope.menuState === openState ? closedState : openState;
+        function toggle() {
+          if ($scope.menuState === openState) {
+            close();
+          } else {
+            open();
+          }
+        }
+
+        function open() {
+          $scope.menuState = openState;
+        }
+
+        function close() {
+          $scope.menuState = closedState;
         }
 
         /**
