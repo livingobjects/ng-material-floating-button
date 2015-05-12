@@ -1,10 +1,10 @@
-+(function (window, angular, undefined) {
++(function(window, angular, undefined) {
 
   'use strict';
 
   var mfb = angular.module('ng-mfb', []);
 
-  mfb.run(['$templateCache', function ($templateCache) {
+  mfb.run(['$templateCache', function($templateCache) {
     $templateCache.put('ng-mfb-menu-default.tpl.html',
       '<ul class="mfb-component--{{position}} mfb-{{effect}}"' +
       '    data-mfb-toggle="{{togglingMethod}}" data-mfb-state="{{menuState}}">' +
@@ -62,12 +62,12 @@
     );
   }]);
 
-  mfb.directive('mfbButtonClose', function ($log) {
+  mfb.directive('mfbButtonClose', function($log) {
     return {
       restrict: 'A',
       require: '^mfbMenu',
-      link: function ($scope, $element, $attrs, mfbMenuController) {
-        $element.bind('click', function () {
+      link: function($scope, $element, $attrs, mfbMenuController) {
+        $element.bind('click', function() {
           mfbMenuController.flipState();
         });
       },
@@ -75,7 +75,7 @@
 
   });
 
-  mfb.directive('mfbMenu', ['$timeout', function ($timeout) {
+  mfb.directive('mfbMenu', ['$timeout', function($timeout) {
     return {
       restrict: 'EA',
       transclude: true,
@@ -90,12 +90,15 @@
         menuState: '=?',
         togglingMethod: '@'
       },
-      templateUrl: function (elem, attrs) {
+      templateUrl: function(elem, attrs) {
         return attrs.templateUrl || 'ng-mfb-menu-default.tpl.html';
       },
-      controller: function ($scope, $attrs) {
+      controller: function($scope, $attrs) {
         var openState = 'open',
           closedState = 'closed';
+
+        // Attached flipstate to the controller in order to be able to be required by other
+        // directives such as mfbButtonClose
         this.flipState = flipState;
 
         $scope.clicked = clicked;
@@ -118,7 +121,7 @@
           $timeout(useClick);
         }
 
-        $attrs.$observe('menuState', function () {
+        $attrs.$observe('menuState', function() {
           $scope.currentState = $scope.menuState;
         });
 
@@ -164,7 +167,7 @@
          * but a touch device is enabled.
          */
         function useClick() {
-          $scope.$apply(function () {
+          $scope.$apply(function() {
             $scope.togglingMethod = 'click';
           });
         }
@@ -172,7 +175,7 @@
     };
   }]);
 
-  mfb.directive('mfbButton', [function () {
+  mfb.directive('mfbButton', [function() {
     return {
       require: '^mfbMenu',
       restrict: 'EA',
@@ -182,7 +185,7 @@
         icon: '@',
         label: '@'
       },
-      templateUrl: function (elem, attrs) {
+      templateUrl: function(elem, attrs) {
         return attrs.templateUrl || 'ng-mfb-button-default.tpl.html';
       }
     };
